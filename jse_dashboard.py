@@ -62,11 +62,18 @@ def signal_logic(row):
     sell = (row['RSI'] > 75 if pd.notna(row['RSI']) else False) or            (row['1Y_Return_%'] < -10 if pd.notna(row['1Y_Return_%']) else False)
     return pd.Series({'Buy_Signal': buy, 'Sell_Signal': sell})
 
-signals = df.apply(signal_logic, axis=1)
-df = pd.concat([df, signals], axis=1)
+if not df.empty:
+    signals = df.apply(signal_logic, axis=1)
+    df = pd.concat([df, signals], axis=1)
 
 st.subheader("🛠 Buy/Sell Recommendations")
-st.dataframe(df[['Ticker', 'Price', 'RSI', 'Buy_Signal', 'Sell_Signal']], use_container_width=True)
+expected_cols = ['Ticker', 'Price', 'RSI', 'Buy_Signal', 'Sell_Signal']
+existing_cols = [col for col in expected_cols if col in df.columns]
+
+if existing_cols:
+    st.dataframe(df[existing_cols], use_container_width=True)
+else:
+    st.warning("No Buy/Sell data available. Please check tickers or data source.")
 
 metric = st.selectbox("Select metric for comparison", ['Price', 'PE_Ratio', 'PB_Ratio', 'EPS_Growth', 'Dividend_Yield', '1Y_Return_%', 'RSI'])
 fig, ax = plt.subplots()
