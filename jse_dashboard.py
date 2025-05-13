@@ -12,7 +12,7 @@ This live dashboard allows you to screen, track, and analyze JSE-listed stocks.
 Use the default list or enter your own stock tickers. Live price and financial updates are pulled from Yahoo Finance.
 """)
 
-def_tickers = ['SOL.JO', 'SHP.JO', 'CPI.JO', 'MTN.JO', 'NPN.JO']
+def_tickers = ['SOL', 'SHP', 'CPI', 'MTN', 'NPN']
 tickers = st.text_input("Enter JSE tickers separated by commas:", value=','.join(def_tickers))
 tickers_list = [t.strip().upper() for t in tickers.split(',')]
 
